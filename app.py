@@ -6,12 +6,10 @@ import torch
 app = Flask(__name__)
 CORS(app)
 
-# Set device
 device = 0 if torch.cuda.is_available() else -1
 print("Device set to:", "CUDA" if device == 0 else "CPU")
 
-# Use a smaller, faster model for summarization
-summarizer = pipeline("summarization", model="sshleifer/distilbart-cnn-12-6", device=device)
+summarizer = pipeline("summarization", model="Falconsai/text_summarization", device=device)
 
 @app.route("/", methods=["GET"])
 def home():
@@ -24,7 +22,7 @@ def generate():
         return jsonify({"error": "Missing 'text' in request body"}), 400
 
     text = data["text"]
-
+    
     if len(text) > 1500:
         return jsonify({"error": "Text too long. Please reduce input to under 1500 characters."}), 400
 
